@@ -1,3 +1,6 @@
+# Why this fork
+This fork of PyBlock for MC pre 1.18 copies `Entities` and `TileEntities` from initial chunk when modifying its data to not lose them.
+
 # PyBlock
 
 This package helps to explore and examine your minecraft world. Find special blocks or get some overview of what you can find in your region/area of interest!
