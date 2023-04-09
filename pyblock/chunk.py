@@ -48,7 +48,7 @@ class Chunk:
     tile_entities: :class:`nbt.TAG_Compound`
         ``self.data['TileEntities']`` as an attribute for easier use
     """
-    __slots__ = ('version', 'data', 'x', 'z', 'tile_entities')
+    __slots__ = ('version', 'data', 'x', 'z', 'tile_entities', 'entities')
 
     def __init__(self, nbt_data: nbt.NBTFile):
         self.version = nbt_data['DataVersion'].value
@@ -56,6 +56,7 @@ class Chunk:
         self.x = self.data['xPos'].value
         self.z = self.data['zPos'].value
         self.tile_entities = self.data['TileEntities']
+        self.entities = self.data['Entities']
 
     def get_section(self, y: int) -> nbt.TAG_Compound:
         """

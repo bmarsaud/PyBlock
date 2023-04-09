@@ -373,6 +373,10 @@ class Region:
         # Create writable chunk
         new_chunk = empty_chunk.EmptyChunk(chunk_x, chunk_z)
 
+        # Add entities
+        new_chunk.add_entities(rchunk.entities)
+        new_chunk.add_tile_entities(rchunk.tile_entities)
+
         # Loop over all the vertical sections
         for y in range(16):
             # Get the list of blocks in a section

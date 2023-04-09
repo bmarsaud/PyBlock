@@ -21,12 +21,14 @@ class EmptyChunk:
     version: :class:`int`
         Chunk's DataVersion
     """
-    __slots__ = ('x', 'z', 'sections', 'version')
+    __slots__ = ('x', 'z', 'sections', 'version', 'entities', 'tile_entities')
     def __init__(self, x: int, z: int):
         self.x = x
         self.z = z
         self.sections: List[EmptySection] = [None]*16
         self.version = 1976
+        self.entities = None
+        self.tile_entities = None
 
     def add_section(self, section: EmptySection, replace: bool = True):
         """
@@ -47,6 +49,12 @@ class EmptyChunk:
         if self.sections[section.y] and not replace:
             raise EmptySectionAlreadyExists(f'EmptySection (Y={section.y}) already exists in this chunk')
         self.sections[section.y] = section
+
+    def add_entities(self, entities):
+        self.entities = entities
+
+    def add_tile_entities(self, tile_entities):
+        self.tile_entities = tile_entities
 
     def get_block(self, x: int, y: int, z: int) -> Block:
         """
@@ -154,8 +162,6 @@ class EmptyChunk:
         # ignored if you pass it as a kwarg in the constructor
         level.name = 'Level'
         level.tags.extend([
-            nbt.TAG_List(name='Entities', type=nbt.TAG_Compound),
-            nbt.TAG_List(name='TileEntities', type=nbt.TAG_Compound),
             nbt.TAG_List(name='LiquidTicks', type=nbt.TAG_Compound),
             nbt.TAG_Int(name='xPos', value=self.x),
             nbt.TAG_Int(name='zPos', value=self.z),
@@ -174,5 +180,7 @@ class EmptyChunk:
                     continue
                 sections.tags.append(s.save())
         level.tags.append(sections)
+        level.tags.append(self.entities)
+        level.tags.append(self.tile_entities)
         root.tags.append(level)
         return root
